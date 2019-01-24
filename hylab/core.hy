@@ -385,7 +385,13 @@
   (deftag t [expr]
     "Cast form to a tuple."
     `(tuple ~expr))
-  
+
+  (deftag a [ls]
+    `(np.array (list ~ls)))
+    
+  (deftag l [ls]
+    `(list ~ls))
+    
   (deftag $ [expr]
     "Curry a form."
     `(tz.curry ~@expr))

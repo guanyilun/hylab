@@ -109,6 +109,18 @@ This is equivalent to using the tag macro for tuple
 #+RESULTS:
 : (11, 12, 13, 14, 15)
 
+or similarly to list or numpy array
+#+BEGIN_SRC hy :session :exports both :results output
+#t(map #$(+ 10) '(1 2 3 4 5))
+#l(map #$(+ 10) '(1 2 3 4 5))
+#a(map #$(+ 10) '(1 2 3 4 5))
+#+END_SRC
+
+#+RESULTS:
+: (11, 12, 13, 14, 15)
+: [11, 12, 13, 14, 15]
+: array([11, 12, 13, 14, 15])
+
 Get elements of lists or tuples
 #+BEGIN_SRC hy :session :exports both :results output
 (let ((x '((1 2) (3 4) (5 6))))
@@ -157,6 +169,14 @@ This can also be written as
 :        0.53169132, 0.99995163, 0.04262882, 0.99932125])
 
 More to come ...
+
+#+BEGIN_SRC hy :session :exports both :results output
+#a(map #$(+ 10) '(1 2 3 4 5))
+#+END_SRC
+
+#+RESULTS:
+: ... <function <lambda> at 0x7f9814d75a60>
+: array([11, 12, 13, 14, 15])
 
 ** Credits
 - Credits to riktor from whom I borrowed lots of codes.
