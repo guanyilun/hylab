@@ -17,7 +17,7 @@ hylab
 
 
 A collection of my hy functions and macros. A lot of the work are
-borrowed from the hycl project.
+borrowed from the hycl project -
 
 https://github.com/riktor/hycl/
 
