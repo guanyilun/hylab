@@ -14,7 +14,9 @@ with open('HISTORY.rst') as history_file:
 requirements = [
     'hy==0.15.0',
     'ptpdb',
-    'pyparsing'
+    'pyparsing',
+    'numpy',
+    'matplotlib'
 ]
 
 setup_requirements = []

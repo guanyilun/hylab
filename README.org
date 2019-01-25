@@ -109,17 +109,19 @@ This is equivalent to using the tag macro for tuple
 #+RESULTS:
 : (11, 12, 13, 14, 15)
 
-or similarly to list or numpy array
+Similarly 
 #+BEGIN_SRC hy :session :exports both :results output
 #t(map #$(+ 10) '(1 2 3 4 5))
 #l(map #$(+ 10) '(1 2 3 4 5))
 #a(map #$(+ 10) '(1 2 3 4 5))
+#h(map #$(+ 10) '(1 2 3 4 5))
 #+END_SRC
 
 #+RESULTS:
 : (11, 12, 13, 14, 15)
 : [11, 12, 13, 14, 15]
 : array([11, 12, 13, 14, 15])
+: HyExpression([11, 12, 13, 14, 15])
 
 Get elements of lists or tuples
 #+BEGIN_SRC hy :session :exports both :results output
@@ -167,6 +169,24 @@ This can also be written as
 #+RESULTS:
 : array([0.38811483, 0.15675672, 0.95855331, 0.07338995, 0.71608897,
 :        0.53169132, 0.99995163, 0.04262882, 0.99932125])
+
+Quick plotting tools 
+#+BEGIN_SRC hy :session :exports code :results output
+  (setf x (np.linspace 1 10 100))
+  (setf y (np.sin x))
+  (plot 
+      x y "r-" 
+      y x "g-" 
+      :xlabel "x"
+      :ylabel "y"
+      :title "Test Plot"
+      :legend ["Line1" "Line2"]
+      :savefig "plots/test.png"
+      :show)
+#+END_SRC
+
+#+RESULTS:
+[[./plots/test.png]]
 
 More to come ...
 

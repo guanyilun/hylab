@@ -367,6 +367,9 @@
     
   (deftag l [ls]
     `(list ~ls))
+
+  (deftag h [ls]
+    `(HyExpression ~ls))
     
   (deftag $ [expr]
     "Curry a form."
@@ -417,6 +420,34 @@
     `(nget (np.array ~lst) ~@indices))
   )
 
+;; plt utilities
+(eval-and-compile
+    
+  (require [hy.extra.anaphoric [ap-map]])
+
+  (defun split-when (pred? lst)
+    (setf indices #l(ap-map (.index lst it) (filter keyword? lst)))
+    (pushl indices 0)
+    (pushr indices (len lst))
+    (lfor
+      i (range 1 (len indices))
+      (cut lst (get indices (dec i)) (get indices i)))
+    )
+
+  (defun keywords-to-doto (lst)
+    (lfor i lst
+      (=> (car i)
+          (name)
+          (+ "." _)
+          (read-str)
+          (, _ #*(cdr i))
+          (HyExpression))))
+
+  (defmacro plot (&rest body)
+    `(progn
+       (plt.plot ~@(car (split-when keyword? body)))
+         (doto plt
+           ~@(keywords-to-doto (cdr (split-when keyword? body)))))))
 
 
 
