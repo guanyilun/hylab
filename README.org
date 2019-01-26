@@ -155,7 +155,7 @@ Threading
 : array([0.38811483, 0.15675672, 0.95855331, 0.07338995, 0.71608897,
 :        0.53169132, 0.99995163, 0.04262882, 0.99932125])
 
-This can also be written as
+This can also be written as (borrowed from riktor)
 #+BEGIN_SRC hy :session :exports both :results output
 (let ((x (np.arange 1 10)))
     (=> x 
@@ -225,15 +225,40 @@ s-expression too
 #+RESULTS:
 : I am 100 years old, and I am 6.91 m tall
 
-Multiple variable assign
-#+BEGIN_SRC hy :session :exports both :results output
-(assign (a b c) [1 2 3])
+I also included codes from [[https://github.com/riktor/hyiter/][hyiter]] written by riktor. Here are some examples
+that I borrowed directly from riktor to showcase this function
 
-(, a b c)
+#+BEGIN_SRC hy :session :exports both :results output
+;; loop on iterable 
+(itr
+  (for i in '(1 2 3))
+  (print i))
 #+END_SRC
 
 #+RESULTS:
-: (1, 2, 3)
+: 1
+: 2
+: 3
+
+#+BEGIN_SRC hy :session :exports both :results output
+(print (itr
+         (for i in (range 10))
+         (when (= (% i 2) 0)
+           (collect (* 10 i)))))
+#+END_SRC
+
+#+RESULTS:
+: [0, 20, 40, 60, 80]
+
+#+BEGIN_SRC hy :session :exports both :results output
+(itr
+  (initially
+    (print "LOOP Start!"))
+  (for i in '(1 2 3))
+  (print i))
+#+END_SRC
+
+This is only a subset of what's possible, for more details please refer to [[https://github.com/riktor/hyiter/blob/master/Usage.ipynb][this link]].
 
 More to come ...
 
