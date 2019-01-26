@@ -68,8 +68,7 @@ Add new columns
 #+RESULTS:
 : (100, 100, 100, 1)
 
-I also wrote a macro that handles a quick python->hy equation
-translation which I found very useful. For example, consider this
+Quick python->hy equation translation,
 
 #+BEGIN_SRC hy :session :exports both :results output
 (let ((x (np.linspace 0 10 10)))
@@ -89,9 +88,9 @@ It can be written as
 #+RESULTS:
 : array([1., 1., 1., 1., 1., 1., 1., 1., 1., 1.])
 
-This is different to the =py-eval= function as this is a macro that gets
-converted into the previous (lisp) notation at compile time instead of
-at run time so there is no performance issue. 
+This is different to the =py-eval= function as this is a macro that
+gets converted into the previous (lisp) notation at compile time so
+there is no performance issue.
 
 The same symbol represents curry when used as tag macro
 #+BEGIN_SRC hy :session :exports both :results output
@@ -99,7 +98,7 @@ The same symbol represents curry when used as tag macro
 #+END_SRC
 
 #+RESULTS:
-: [11, 12, 13, 14, 15]
+: (11, 12, 13, 14, 15)
 
 This is equivalent to using the tag macro for tuple
 #+BEGIN_SRC hy :session :exports both :results output
@@ -187,6 +186,54 @@ Quick plotting tools
 
 #+RESULTS:
 [[./plots/test.png]]
+
+For printing
+#+BEGIN_SRC hy :session :exports both :results output
+(setf 
+  age 99
+  height 2.2)
+  
+(print (+ "I am " (str age) " years old, and I am " (str height) " m tall"))
+#+END_SRC
+
+#+RESULTS:
+: I am 99 years old, and I am 2.2 m tall
+
+A simpler way of printing is
+#+BEGIN_SRC hy :session :exports both :results output
+(print (.format "I am {} years old, and I am {} m tall" age height))
+#+END_SRC
+
+#+RESULTS:
+: I am 99 years old, and I am 2.2 m tall
+
+An even simpler way of printing from hylab
+#+BEGIN_SRC hy :session :exports both :results output
+(print #f"I am {age} years old, and I am {height} m tall")
+#+END_SRC
+
+#+RESULTS:
+: I am 99 years old, and I am 2.2 m tall
+
+Clearly this is inspired by f-string in python. It allows arbitrary
+s-expression too
+
+#+BEGIN_SRC hy :session :exports both :results output
+(print #f"I am {(inc age)} years old, and I am {(round (* np.pi height) 2)} m tall")
+#+END_SRC
+
+#+RESULTS:
+: I am 100 years old, and I am 6.91 m tall
+
+Multiple variable assign
+#+BEGIN_SRC hy :session :exports both :results output
+(assign (a b c) [1 2 3])
+
+(, a b c)
+#+END_SRC
+
+#+RESULTS:
+: (1, 2, 3)
 
 More to come ...
 

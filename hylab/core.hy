@@ -182,16 +182,6 @@
             ~@(cdr body)
             ~g!sexp-1)))
 
-  (defmacro when (condition &rest body)
-    `(if ~condition
-         (progn
-           ~@body)))
-
-  (defmacro unless (condition &rest body)
-    `(if (not ~condition)
-         (progn
-           ~@body)))
-
   (defun pushr (ls el)
     (.append ls el))
 
@@ -254,6 +244,10 @@
                                            (destruc p var 0))
                                      rec))))))))
 
+  (defmacro assign (source target)
+    (lfor i (range (len source))
+      `(setf ~(get source i) (get ~target ~i))))
+    
   (defun dbind-ex (binds body)
     (if (null binds)
         `(progn ~@body)
@@ -450,5 +444,18 @@
            ~@(keywords-to-doto (cdr (split-when keyword? body)))))))
 
 
+;; print utils
+;; f-string inspired macro
+(eval-and-compile
+  (import re)
 
+  (defun f-parser (s)
+    (, (re.sub "{.*?}" "{}" s)
+      #*(re.findall "{(.*?)}" s)))
+  
+  (deftag f [s]
+    `(.format
+       ~(car (f-parser s))
+       ~@(map read-str (cdr (f-parser s))))))
+  
 
