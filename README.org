@@ -225,8 +225,9 @@ s-expression too
 #+RESULTS:
 : I am 100 years old, and I am 6.91 m tall
 
-I also included codes from [[https://github.com/riktor/hyiter/][hyiter]] written by riktor. Here are some examples
-that I borrowed directly from riktor to showcase this function
+I also included codes from [[https://github.com/riktor/hyiter/][hyiter]] written by riktor, which I find
+amazing. Here are some examples that I borrowed directly from hyiter
+to showcase this function
 
 #+BEGIN_SRC hy :session :exports both :results output
 ;; loop on iterable 
@@ -258,7 +259,46 @@ that I borrowed directly from riktor to showcase this function
   (print i))
 #+END_SRC
 
-This is only a subset of what's possible, for more details please refer to [[https://github.com/riktor/hyiter/blob/master/Usage.ipynb][this link]].
+#+RESULTS:
+: LOOP Start!
+: 1
+: 2
+: 3
+
+#+BEGIN_SRC hy :session :exports both :results output
+(itr
+  (for i in '(1 2 3))
+  (print i)
+  (finally
+    (print "LOOP Finish!")))
+#+END_SRC
+
+#+RESULTS:
+: 1
+: 2
+: 3
+: LOOP Finish!
+
+#+BEGIN_SRC hy :session :exports both :results output
+(print (itr
+         (for i in (range 10))
+         (maximize i)))
+#+END_SRC
+
+#+RESULTS:
+: 9
+
+#+BEGIN_SRC hy :session :exports both :results output
+(print (itr
+         (for i in (range 10))
+         (count (= (% i 2) 0))))
+#+END_SRC
+
+#+RESULTS:
+: 5
+
+This is only a subset of what's possible, for more details please
+refer to [[https://github.com/riktor/hyiter/blob/master/Usage.ipynb][this link]].
 
 More to come ...
 
