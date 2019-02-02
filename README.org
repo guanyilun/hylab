@@ -3,7 +3,8 @@ This repository collects some of the useful functions and macros that
 I wrote or borrowed for hylang. I am more accustomed to the common
 lisp syntax, so I borrowed from the nice work of riktor on [[https://github.com/riktor/hycl/][hycl]] to 
 make hylang more friendly to people coming from common lisp. 
-
+** Prerequisite
+hy==0.15.0
 ** Installation
 To install
 #+BEGIN_SRC 
@@ -30,6 +31,7 @@ To start with, import the core library
 
 #+RESULTS:
 : 11
+
 
 Numpy and plt are already loaded by default
 
@@ -121,6 +123,20 @@ Similarly
 : [11, 12, 13, 14, 15]
 : array([11, 12, 13, 14, 15])
 : HyExpression([11, 12, 13, 14, 15])
+
+Lambda expression, the following three expressions are equivalent, the
+first is the built-in notation from hylang, the second is a common
+lisp like alias and the last is a unicode alias.
+#+BEGIN_SRC hy :session :exports both :results output
+#l(map (fn [x] (1+ x)) [1 2 3])
+#l(map (lambda (x) (1+ x)) [1 2 3])
+#l(map (λ (x) (1+ x)) [1 2 3])
+#+END_SRC
+
+#+RESULTS:
+: [2, 3, 4]
+: [2, 3, 4]
+: [2, 3, 4]
 
 Get elements of lists or tuples
 #+BEGIN_SRC hy :session :exports both :results output

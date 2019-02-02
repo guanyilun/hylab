@@ -161,6 +161,10 @@
   (defmacro lambda (lambda-list &rest body)
     `(fn ~(list lambda-list) ~@body))
 
+  ;; unicode alias for lambda
+  (defmacro λ (lambda-list &rest body)
+    `(fn ~(list lambda-list) ~@body))
+
   (defmacro! let (var:val &rest body)
     `((lambda ~(mapcar car var:val) ~@body)
       ~@(mapcar cadr var:val)))
