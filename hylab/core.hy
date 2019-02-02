@@ -29,6 +29,10 @@
        (setv ~@(get args (slice -2 None)))
        ~(get args -2)))
 
+  ;; for mere clarity 
+  (defmacro defparameter (&rest args)
+    `(setv ~@args))
+
   (defmacro typep (obj objtype)
     `(is (type ~obj) ~objtype))
 
@@ -372,6 +376,12 @@
   (deftag $ [expr]
     "Curry a form."
     `(tz.curry ~@expr))
+  
+  (deftag sym [expr]
+    `(HySymbol ~expr))
+
+  (deftag . [sym]
+    `(HySymbol (+ "." ~sym)))
   )
 
 ;; quick python evaluation
