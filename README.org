@@ -32,8 +32,19 @@ To start with, import the core library
 #+RESULTS:
 : 11
 
+One can also use ~defparameter~ which is the same as ~setv~ or ~setf~,
+however I find it more readable to use this exclusively for global
+variables.
 
-Numpy and plt are already loaded by default
+#+BEGIN_SRC hy :session :exports both :results output
+(defparameter *global-var* 10)
+(print *global-var*)
+#+END_SRC
+
+#+RESULTS:
+: 10
+
+~numpy~ and ~plt~ are also loaded automatically
 
 #+BEGIN_SRC hy :session :exports both :results output
 (print (np.arange 0 10))
@@ -123,6 +134,20 @@ Similarly
 : [11, 12, 13, 14, 15]
 : array([11, 12, 13, 14, 15])
 : HyExpression([11, 12, 13, 14, 15])
+
+Some convenient conversions (to HySymbol) for macros
+#+BEGIN_SRC hy :session :exports both :results output
+#sym"my-var1"
+#sym 'my-var2
+#."my-var3"
+#. 'my-var4
+#+END_SRC
+
+#+RESULTS:
+: HySymbol('my-var1')
+: HySymbol('my-var2')
+: HySymbol('.my-var3')
+: HySymbol('.my-var4')
 
 Lambda expression, the following three expressions are equivalent, the
 first is the built-in notation from hylang, the second is a common
