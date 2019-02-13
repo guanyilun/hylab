@@ -5,14 +5,14 @@
 
 from setuptools import setup, find_packages
 
-with open('README.rst') as readme_file:
+with open('README.org') as readme_file:
     readme = readme_file.read()
 
 with open('HISTORY.rst') as history_file:
     history = history_file.read()
 
 requirements = [
-    'hy==0.15.0',
+    'hy>=0.15.0',
     'ptpdb',
     'pyparsing',
     'numpy',
