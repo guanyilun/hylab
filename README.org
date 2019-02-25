@@ -13,7 +13,7 @@ pip install git+https://github.com/guanyilun/hylab/
 
 ** Examples
 To start with, import the core library
-#+BEGIN_SRC hy :session :exports code :results output
+#+BEGIN_SRC hy :session :exports code :results none
 (import [hylab.core [*]])
 (require [hylab.core [*]])
 #+END_SRC
@@ -326,6 +326,20 @@ I haven't considered, PR is welcomed).
 
 #+RESULTS:
 : Pi =     3.14
+
+#+BEGIN_SRC hy :session :exports both :results output
+(setf n "cat")
+(print #f"Animal: {n:5}")
+(print #f"Animal: {n:>5}")
+(print #f"Animal: {n:^5}")
+(print #f"Animal: {n:*^5}")
+#+END_SRC
+
+#+RESULTS:
+: Animal: cat
+: Animal:   cat
+: Animal:  cat
+: Animal: *cat*
 
 I also included codes from [[https://github.com/riktor/hyiter/][hyiter]] written by riktor, which I find
 amazing. Here are some examples that I borrowed directly from hyiter
