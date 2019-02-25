@@ -13,7 +13,7 @@ pip install git+https://github.com/guanyilun/hylab/
 
 ** Examples
 To start with, import the core library
-#+BEGIN_SRC hy :session :exports code :results none
+#+BEGIN_SRC hy :session :exports code :results output
 (import [hylab.core [*]])
 (require [hylab.core [*]])
 #+END_SRC
@@ -316,6 +316,16 @@ s-expression too
 
 #+RESULTS:
 : I am 100 years old, and I am 6.91 m tall
+
+It should work with format options too (though there may be cases that
+I haven't considered, PR is welcomed).
+
+#+BEGIN_SRC hy :session :exports both :results output
+(print #f"Pi = {np.pi:8.2f}")
+#+END_SRC
+
+#+RESULTS:
+: Pi =     3.14
 
 I also included codes from [[https://github.com/riktor/hyiter/][hyiter]] written by riktor, which I find
 amazing. Here are some examples that I borrowed directly from hyiter

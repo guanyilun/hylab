@@ -1,13 +1,3 @@
-;; Codes borrowed from
-;; https://github.com/riktor/hycl
-
-;; Created by: riktor
-;; Modified by: guanyilun
-
-(import
-  [hy [HyKeyword]]
-  [hy.contrib.hy-repr [hy-repr]])
-
 (import [numpy :as np])
 (import [matplotlib.pyplot :as plt])
 
@@ -84,6 +74,7 @@
     `(+ ~n 1))
 
   ;; list functions
+
   (setf nil (HyExpression ()))
 
   (defun null (ls)
@@ -464,8 +455,16 @@
   (import re)
 
   (defun f-parser (s)
-    (, (re.sub "{.*?}" "{}" s)
-      #*(re.findall "{(.*?)}" s)))
+    "Parse f-string fields and opts"
+    (, (.format (re.sub "{(.*?)}" "{}" s)
+             #*(lfor m (re.findall "{(.*?)}" s)
+                     (if (in ":" m)
+                         (+ "{:" (.join "" (cut (.split m ":") -1)) "}")
+                         "{}")))
+       #*(lfor m (re.findall "{(.*?)}" s)
+               (if (in ":" m)
+                   (.join "" (cut (.split m ":") 0 -1))
+                   m))))
   
   (deftag f [s]
     `(.format
