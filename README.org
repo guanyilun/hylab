@@ -119,6 +119,19 @@ Some more examples of ~nget~
 : array([ True, False,  True, False, False,  True])
 : array([ 2, 14, 32])
 
+#+BEGIN_SRC hy :session :exports both :results output
+  (nget a ::2 3)
+  (nget a ::2 3 None)
+  (nget a ... 0)
+#+END_SRC
+
+#+RESULTS:
+: array([ 3, 15, 27])
+: array([[ 3],
+:        [15],
+:        [27]])
+: array([ 0,  6, 12, 18, 24, 30])
+
 Quick python->hy equation translation,
 
 #+BEGIN_SRC hy :session :exports both :results output
