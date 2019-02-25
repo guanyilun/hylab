@@ -12,7 +12,7 @@ with open('HISTORY.rst') as history_file:
     history = history_file.read()
 
 requirements = [
-    'hy>=0.15.0',
+    'hy==0.15.0',
     'ptpdb',
     'pyparsing',
     'numpy',
