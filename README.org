@@ -53,7 +53,7 @@ variables.
 #+RESULTS:
 : [0 1 2 3 4 5 6 7 8 9]
 
-Numpy array indexing can be done by
+~numpy~ array indexing can be done by
 #+BEGIN_SRC hy :session :exports both :results output
 (setf x (np.random.randn 100 100 100))
 (nget x 0 1 :10)
@@ -65,7 +65,7 @@ array([ 0.87120279, -1.66700778,  0.26169724, -0.60144387,  0.55433208,
        -0.43233873, -1.11727772,  0.41093365,  0.36703862, -1.88770578])
 #+end_example
 
-With Ellipsis
+With ~Ellipsis~
 #+BEGIN_SRC hy :session :exports both :results output
 (. (nget x ... 0:10) shape)
 #+END_SRC
@@ -80,6 +80,44 @@ Add new columns
 
 #+RESULTS:
 : (100, 100, 100, 1)
+
+Some more examples of ~nget~
+#+BEGIN_SRC hy :session :exports code :results output
+  (setf a (.reshape (np.arange 36) (, 6 6)))
+#+END_SRC
+
+#+RESULTS:
+: array([[ 0,  1,  2,  3,  4,  5],
+:        [ 6,  7,  8,  9, 10, 11],
+:        [12, 13, 14, 15, 16, 17],
+:        [18, 19, 20, 21, 22, 23],
+:        [24, 25, 26, 27, 28, 29],
+:        [30, 31, 32, 33, 34, 35]])
+
+#+BEGIN_SRC hy :session :exports both :results output
+  (nget a (, 0 1 2 3 4) (, 1 2 3 4 5))
+#+END_SRC
+
+#+RESULTS:
+: array([ 1,  8, 15, 22, 29])
+
+#+BEGIN_SRC hy :session :exports both :results output
+  (nget a 3: (, 0 2 5))
+#+END_SRC
+
+#+RESULTS:
+: array([[18, 20, 23],
+:        [24, 26, 29],
+:        [30, 32, 35]])
+
+#+BEGIN_SRC hy :session :exports both :results output
+  (setf mask (np.array (, 1 0 1 0 0 1) :dtype bool))
+  (nget a mask  2)
+#+END_SRC
+
+#+RESULTS:
+: array([ True, False,  True, False, False,  True])
+: array([ 2, 14, 32])
 
 Quick python->hy equation translation,
 
