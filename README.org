@@ -4,7 +4,7 @@ I wrote or borrowed for hylang. I am more accustomed to the common
 lisp syntax, so I borrowed from the nice work of riktor on [[https://github.com/riktor/hycl/][hycl]] to 
 make hylang more friendly to people coming from common lisp. 
 ** Prerequisite
-hy==0.15.0
+hy==0.17.0
 ** Installation
 To install
 #+BEGIN_SRC 

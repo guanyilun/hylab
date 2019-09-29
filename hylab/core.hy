@@ -19,7 +19,7 @@
        (setv ~@(get args (slice -2 None)))
        ~(get args -2)))
 
-  ;; for mere clarity 
+  ;; for mere clarity
   (defmacro defparameter (&rest args)
     `(setv ~@args))
 
@@ -74,8 +74,7 @@
     `(+ ~n 1))
 
   ;; list functions
-
-  (setf nil (HyExpression ()))
+  (setf nil '())
 
   (defun null (ls)
     (= nil ls))
@@ -91,7 +90,7 @@
 
   (defun consp (el)
     (and (not (= el nil))
-      (typep el HyExpression)))
+         (typep el HyExpression)))
 
   (defun car (ls)
     (first ls))
@@ -131,10 +130,10 @@
   (defun mapcan (func ls)
     (loop
       ((ls ls)
-        (acc ()))
+        (acc '()))
       (if ls
-        (recur (cdr ls) (nconc acc (func (car ls))))
-        (HyExpression acc))))
+          (recur (cdr ls) (nconc acc (func (car ls))))
+          (HyExpression acc))))
 
   (defun append (ls1 ls2)
     (+ ls1 ls2))
@@ -191,30 +190,30 @@
 
 (eval-and-compile
   (defun flatten-1 (ls)
-    (let ((acc ()))
-         (for [el ls]
-           (if (consp el)
-               (nconc acc el)
-               (.append acc el)))
-         acc))
+    (let ((acc '()))
+      (for [el ls]
+        (if (consp el)
+            (nconc acc el)
+            (.append acc el)))
+      acc))
 
   (defmacro cond/cl (&rest branches)
     (loop
       ((ls branches)
-       (cont (lambda (x) x)))
+        (cont (lambda (x) x)))
       (if ls
           (recur (cdr ls) (lambda (x) (cont `(if ~(caar ls)
-                                                 (progn ~@(cdar ls))
-                                                 ~x))))
+                                            (progn ~@(cdar ls))
+                                            ~x))))
           (cont None))))
 
   (defmacro! case (exp &rest branches)
     `(let ((~g!val ~exp))
-          (cond/cl ~@(list (map (lambda (br)
-                                  (if (= (car br) 'otherwise)
-                                      `(True ~@(cdr br))
-                                      `((eq ~g!val ~(car br)) ~@(cdr br))))
-                                branches)))))
+       (cond/cl ~@(list (map (lambda (br)
+                              (if (= (car br) 'otherwise)
+                                  `(True ~@(cdr br))
+                                  `((eq ~g!val ~(car br)) ~@(cdr br))))
+                           branches)))))
 
   (defun subseq (seq start end)
     (case (type seq)
@@ -246,7 +245,7 @@
   (defmacro assign (source target)
     (lfor i (range (len source))
       `(setf ~(get source i) (get ~target ~i))))
-    
+
   (defun dbind-ex (binds body)
     (if (null binds)
         `(progn ~@body)
@@ -350,24 +349,24 @@
 
 (eval-and-compile
   (import [toolz.curried :as tz])
-  
+
   (deftag t [expr]
     "Cast form to a tuple."
     `(tuple ~expr))
 
   (deftag a [ls]
     `(np.array (list ~ls)))
-    
+
   (deftag l [ls]
     `(list ~ls))
 
   (deftag h [ls]
     `(HyExpression ~ls))
-    
+
   (deftag $ [expr]
     "Curry a form."
     `(tz.curry ~@expr))
-  
+
   (deftag sym [expr]
     `(HySymbol ~expr))
 
@@ -377,13 +376,13 @@
 
 ;; quick python evaluation
 (eval-and-compile
-  
+
   (import [hylab.parser [PyParser]])
-  
+
   (defun pyparse (expr-str)
     (let ((ps (PyParser)))
       (.parse ps expr-str)))
-  
+
   (defmacro $ (expr)
     (read-str (pyparse expr))))
 
@@ -421,7 +420,7 @@
 
 ;; plt utilities
 (eval-and-compile
-    
+
   (require [hy.extra.anaphoric [ap-map]])
 
   (defun split-when (pred? lst)
@@ -465,7 +464,7 @@
                (if (in ":" m)
                    (.join "" (cut (.split m ":") 0 -1))
                    m))))
-  
+
   (deftag f [s]
     `(.format
        ~(car (f-parser s))
@@ -482,20 +481,20 @@
       False
       (let ((flag True))
         (for [tp (zip clause ptn)]
-          (when (and (not (= (get tp 1) '_)) (not (= (get tp 0) (get tp 1)))) 
+          (when (and (not (= (get tp 1) '_)) (not (= (get tp 0) (get tp 1))))
             (setf flag False)
             (break)))
         flag)))
 
 (defun flatten-destruc (ls)
-  (let ((acc ()))
+  (let ((acc '()))
     (for [el ls]
       (if (consp (car el))
           (.extend acc (flatten-destruc el))
           (.append acc el)))
     acc))
 
-(defun parse-clause (clause parsed ret-sym)   
+(defun parse-clause (clause parsed ret-sym)
   (cond/cl
     ((keyword? clause)
      (setf (get parsed :loop-tag) clause))
@@ -506,15 +505,15 @@
     ;; finally clause
     ((= (car clause) 'finally)
       (setf (get parsed :finally) (cdr clause)))
-    
+
     ;; with clause
     ((matchp clause '(with _ = _))
       (if (not (consp (get clause 1)))
           (push `(~(get clause 1) ~(get clause 3)) (get parsed :with))
           (setf (get parsed :with)
-                (append (nreverse (flatten-destruc (destruc (get clause 1) (get clause 3) 0))) 
+                (append (nreverse (flatten-destruc (destruc (get clause 1) (get clause 3) 0)))
                         (get parsed :with)))))
-    
+
     ;; for = clause
     ((matchp clause '(for _ = _))
       (if (not (consp (get clause 1)))
@@ -526,7 +525,7 @@
                   (append destr (get parsed :with)))
             (setf (get parsed :for)
                   (append destr (get parsed :for))))))
-    
+
     ((matchp clause '(for _ = _ then _))
       (let ((__cur__  (gensym)))
         (if (not (consp (get clause 1)))
@@ -548,7 +547,7 @@
         (push `(~__it__ (iter ~(get clause 3))) (get parsed :with))
         (push `(~__cur__ (next ~__it__) ) (get parsed :with))
         (if (not (consp (get clause 1)))
-            (progn                 
+            (progn
               (push `(~(get clause 1) ~__cur__) (get parsed :with))
               (push `(~__cur__ (next ~__it__)) (get parsed :for))
               (push `(~(get clause 1) ~__cur__) (get parsed :for)))
@@ -559,8 +558,8 @@
               (setf (get parsed :for)
                     (append destr (get parsed :for)))))))
 
-    ;; for from clause    
-    ((matchp clause '(for _ from _))      
+    ;; for from clause
+    ((matchp clause '(for _ from _))
       (push `(~(get clause 1) ~(get clause 3)) (get parsed :with))
       (push `(~(get clause 1) (+ ~(get clause 1) 1)) (get parsed :for)))
     ((matchp clause '(for _ from _ below _))
@@ -585,7 +584,7 @@
         (push `(~__counter__ 0) (get parsed :with))
         (push `(~__counter__ (+ ~__counter__ 1)) (get parsed :for))
         (push `(not (< ~__counter__ ~(get clause 1))) (get parsed :break))))
-    
+
     ((matchp clause '(drop _))
       (let ((__counter__ (gensym "counter")))
         (push `(~__counter__ 0) (get parsed :with))
@@ -599,7 +598,7 @@
 
     ((matchp clause '(until _))
       (push (get clause 1) (get parsed :break)))
-    
+
     (True
       (push clause (get parsed :body)))))
 
@@ -622,15 +621,15 @@
     parsed-clauses))
 
 (defmacro! nreplace-clauses (tree condition replace)
-  `(let ((!acc! ())
+  `(let ((!acc! '())
           (~g!orig-tree ~tree)
           (~g!replaced [False]))
-     (loop     
-       ((~g!tree ~g!orig-tree))       
+     (loop
+       ((~g!tree ~g!orig-tree))
        (progn
-         (for [~g!ind (range (len ~g!tree))]         
-           (setf !el! (get ~g!tree ~g!ind))         
-           (when ~condition           
+         (for [~g!ind (range (len ~g!tree))]
+           (setf !el! (get ~g!tree ~g!ind))
+           (when ~condition
              (setf (get ~g!tree ~g!ind) ~replace
                    (get ~g!replaced 0) True))
            (when (and (consp !el!) (not (= (get !el! 0) 'itr)))
@@ -697,13 +696,13 @@
                                  ((matchp !el! '(count _ into _))
                                    (.append !acc! [(get !el! 3) nil])
                                    (get !el! 3)))))
-                      `(when ~(get !el! 1) 
+                      `(when ~(get !el! 1)
                          (setv ~sym (+ ~sym 1))))))
 
 (defun replace-return (body)
   (first (nreplace-clauses body
                            (and (typep !el! HyExpression)
-                                (or (= (car !el!) 'return) (= (car !el!) 'return-from)))          
+                                (or (= (car !el!) 'return) (= (car !el!) 'return-from)))
                            (cond/cl
                              ((matchp !el! '(return _))
                                `(raise (hyiter.core.Return ~(get !el! 1))))
@@ -739,7 +738,7 @@
     ((= replacer replace-collect) `(. ~acc-sym append))
     ((= replacer replace-append) `(. ~acc-sym extend))))
 
-(defmacro/g! itr (&rest clauses)  
+(defmacro/g! itr (&rest clauses)
   (let ((g!parsed (parse-clauses clauses g!ret)))
     (let ((body (get g!parsed :body))
            (accs nil)
@@ -747,8 +746,8 @@
            (init-var nil)
           (update-fn nil))
       (for [el [replace-collect replace-append
-                replace-minimize replace-sum replace-maximize 
-                replace-count]]   
+                replace-minimize replace-sum replace-maximize
+                replace-count]]
         (setf res (el g!ret g!update body)
               body (get res 0)
               acc-ls (get res 1)
@@ -764,29 +763,29 @@
                 update-fn (get-update-fn el g!ret))))
       `(do
          (import hyiter.core)
-         (try       
-           (do         
+         (try
+           (do
              (setv ~g!tag ~(get g!parsed :loop-tag))
              (setv ~g!ret ~init-var
-                   ~g!update ~update-fn)             
-             ~@(replace-return (get g!parsed :initially))             
+                   ~g!update ~update-fn)
+             ~@(replace-return (get g!parsed :initially))
              (setv ~@accs)
              (try
                (do
-                 (setv ~@(flatten-1 (get g!parsed :with)))             
+                 (setv ~@(flatten-1 (get g!parsed :with)))
                  (while True
                    ~(when (get g!parsed :drop)
                       `(when (and ~@(get g!parsed :drop))
                          (setv ~@(flatten-1 (get g!parsed :for)))
-                         (continue)))               
+                         (continue)))
                    ~@(replace-continue (get g!parsed :for)
-                                       (replace-return body)) 
+                                       (replace-return body))
                    (setv ~@(flatten-1 (get g!parsed :for)))
                    (when (or ~@(get g!parsed :break))
                      (break))))
                (except [e StopIteration]
-                 None))         
-             ~@(replace-return (get g!parsed :finally)) 
+                 None))
+             ~@(replace-return (get g!parsed :finally))
              ~g!ret)
            (except [r hyiter.core.Return]
              (. r val))
