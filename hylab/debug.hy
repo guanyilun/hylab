@@ -1,17 +1,17 @@
-(require [hylab.cl [*]])
+(require [hylab.core [*]])
 
 (eval-and-compile
   (deftag bp []
     ;; breakpoint
     `(do (import ptpdb) (ptpdb.set_trace)))
-  
+
   (import [io [StringIO]]
           traceback
           sys
           code
           [IPython.terminal.embed [InteractiveShellEmbed :as ise]]
-          [IPython.lib.pretty [pretty]])  
-  
+          [IPython.lib.pretty [pretty]])
+
   (defclass CallStackViewer [object]
     (defun __init__ (self tb)
       (setf self.tb tb
@@ -21,7 +21,7 @@
         (setf tb tb.tb-next)
         (.append self.frames tb.tb-frame))
       (setf self.last-frame (get self.frames -1)))
-    
+
     (defun get-locs (self &optional (n 5))
       (setf locs [])
       (for [frame (get self.frames (slice (- n) None))]
@@ -35,7 +35,7 @@
                          (if (not-in k self.injected-symbols))))
         (.append locs (, code.co-name args loc-vars)))
       locs))
-  
+
   (defun debug (f)
     ;; postmortem (in failed call stack)
     ;; 1. Don't use in hy-mode repl
@@ -57,7 +57,7 @@
                   (get ns 'get-locs) (lambda (&optional [n 5]) (dv.get-locs :n n)))
             (.mainloop (ise) :local-ns ns)))))
     wrapper)
-  
+
   (deftag d [function-defininition-form]
     ;; Try this! Enjoy!
     ;; #d
@@ -66,11 +66,11 @@
     ;;   (/ 1 0))
     `(with-decorator debug
        ~function-defininition-form))
-  
+
   (defmacro me (sexp)
     ;; use it with this emacs-lisp-command)
     ;; (defun pp-macroexpand ()
-    ;;   (interactive "*")  
+    ;;   (interactive "*")
     ;;   (when (get-buffer "*Hy Macroexpand*")
     ;;     (kill-buffer "*Hy Macroexpand*"))
     ;;   (let ((beg nil)
@@ -86,9 +86,9 @@
     ;;       (display-buffer buf))))
     `(=> ~sexp
          macroexpand-1
-         hy-repr       
+         hy-repr
          (.replace ";" "")
          (.replace "(." "(!dot")
-         (get _ (slice 1 (len _)))       
+         (get _ (slice 1 (len _)))
          print))
   )

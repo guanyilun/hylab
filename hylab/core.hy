@@ -475,7 +475,6 @@
 ;; iterate macro
 ;; borrowed from https://github.com/riktor/hyiter
 ;; commit: db2757327da313e7147131230c80d8bcef60b516
-
 (defun matchp (clause ptn)
   (if (not (= (length clause) (length ptn)))
       False
@@ -705,9 +704,9 @@
                                 (or (= (car !el!) 'return) (= (car !el!) 'return-from)))
                            (cond/cl
                              ((matchp !el! '(return _))
-                               `(raise (hyiter.core.Return ~(get !el! 1))))
+                               `(raise (hylab.core.Return ~(get !el! 1))))
                              ((matchp !el! '(return-from _ _))
-                               `(raise (hyiter.core.TaggedReturn ~(get !el! 1) ~(get !el! 2))))))) )
+                               `(raise (hylab.core.TaggedReturn ~(get !el! 1) ~(get !el! 2))))))))
 
 (defun replace-continue (parsed-for body)
   (first (nreplace-clauses body
@@ -762,7 +761,6 @@
                 init-var (get-init-val el)
                 update-fn (get-update-fn el g!ret))))
       `(do
-         (import hyiter.core)
          (try
            (do
              (setv ~g!tag ~(get g!parsed :loop-tag))
@@ -787,9 +785,9 @@
                  None))
              ~@(replace-return (get g!parsed :finally))
              ~g!ret)
-           (except [r hyiter.core.Return]
+           (except [r hylab.core.Return]
              (. r val))
-           (except [tr hyiter.core.TaggedReturn]
+           (except [tr hylab.core.TaggedReturn]
              (if (= (. tr tag) ~g!tag)
                  (. tr val)
                  (raise tr))))))))
